@@ -20,12 +20,16 @@ router
 
   // How middleware work
   // .post(tourController.checkcreateValid, tourController.createTour);
-  .post(tourController.createTour);
+  .post(authController.protect, tourController.createTour);
 
 router
   .route("/:id")
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect,
+    authController.restrictTo("admin", "lead-guide"),
+    tourController.deleteTour
+  );
 
 module.exports = router;
